@@ -12,9 +12,6 @@ const PLUGIN_NAME = 'gulp-kd-pistachio-compiler';
 // }
 
 function compile() {
-  if (!prefixText) {
-    throw new PluginError(PLUGIN_NAME, 'Missing prefix text!');
-  }
 
   // creating a stream through which each file will pass
   var stream = through.obj(function(file, enc, cb) {

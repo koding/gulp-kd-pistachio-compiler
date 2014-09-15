@@ -22,7 +22,7 @@ module.exports = function () {
     var contents;
 
     try {
-      contents = pistachioCompiler(file.contents.toString('utf8'));
+      contents = pistachioCompiler(file.contents.toString('utf8')).toString('utf8');
     } catch (err) {
       return cb(new PluginError(PLUGIN_NAME, err));
     } finally {

@@ -1,42 +1,35 @@
+'use strict';
+
 var through = require('through2');
 var pistachioCompiler = require('pistachio-compiler');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 
-const PLUGIN_NAME = 'gulp-kd-pistachio-compiler';
+var PLUGIN_NAME = 'gulp-kd-pistachio-compiler';
 
-// function compileInStream() {
-//   var stream = through();
-//   stream.write(prefixText);
-//   return stream;
-// }
+module.exports = function () {
 
-function compile() {
-
-  // creating a stream through which each file will pass
-  var stream = through.obj(function(file, enc, cb) {
-    if (file.isNull()) {
-       // do nothing if no contents
-    }
-
-    if (file.isBuffer()) {
-        file.contents = pistachioCompiler(file.contents);
-    }
+  return through.obj(function (file, enc, cb) {
 
     if (file.isStream()) {
-        file.contents = file.contents.pipe(through(function(chunk, enc, callback){
-          console.log(chunk);
-        }));
+      return cb(new PluginError( PLUGIN_NAME, 'Streaming not supported'));
     }
 
-    this.push(file);
+    if (file.isNull()){
+      return cb(null, file);
+    }
 
-    return cb();
+    var contents;
+
+    try {
+      contents = pistachioCompiler(file.contents.toString('utf8'));
+    } catch (err) {
+      return cb(new PluginError(PLUGIN_NAME, err));
+    } finally {
+      file.contents = new Buffer(contents);
+      return cb(null, file);
+    }
+
   });
 
-  // returning the file stream
-  return stream;
 };
-
-// exporting the plugin main function
-module.exports = compile;

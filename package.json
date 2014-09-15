@@ -1,6 +1,6 @@
 {
   "name": "gulp-kd-pistachio-compiler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "pistachio compiler for KD's own templates",
   "main": "index.js",
   "dependencies": {
